@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Clone выполняет клонирование репозитория во временную папку.
 func Clone(ctx context.Context, repoURL, dst string) error {
 	cmd := exec.CommandContext(ctx, "git", "clone", "--depth=1", "--filter=blob:none", "--sparse", repoURL, dst)
 	out, err := cmd.CombinedOutput()

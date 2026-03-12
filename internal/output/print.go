@@ -7,12 +7,14 @@ import (
 	"io"
 )
 
+// PrintJSON печатает результат в формате JSON.
 func PrintJSON(w io.Writer, res model.Result) error {
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
 	return enc.Encode(res)
 }
 
+// PrintText печатает результат в текстовом виде.
 func PrintText(w io.Writer, res model.Result) error {
 	if _, err := fmt.Fprintf(w, "Module: %s\n", res.Module); err != nil {
 		return err

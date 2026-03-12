@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Parse читает go.mod и достаёт имя модуля и версию Go.
 func Parse(path string) (moduleName, goVersion string, err error) {
 	file, err := os.Open(path)
 	if err != nil {

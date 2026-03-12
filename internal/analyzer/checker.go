@@ -13,9 +13,12 @@ import (
 	"strings"
 )
 
+// Find запускает go list и возвращает зависимости, для которых есть обновления.
 func Find(ctx context.Context, repoDir string) ([]model.Dependency, error) {
 	cmd := exec.CommandContext(ctx, "go", "list", "-m", "-u", "-json", "all")
 	cmd.Dir = repoDir
+
+	// Отключаем внешний go.work, чтобы анализировать только текущий репозиторий.
 	cmd.Env = append(os.Environ(), "GOWORK=off")
 
 	stdout, err := cmd.StdoutPipe()
@@ -35,6 +38,7 @@ func Find(ctx context.Context, repoDir string) ([]model.Dependency, error) {
 	var stderrBytes []byte
 	errCh := make(chan error, 1)
 
+	// Читаем stderr отдельно, чтобы процесс не завис из-за заполненного pipe.
 	go func() {
 		var readErr error
 		stderrBytes, readErr = io.ReadAll(stderr)
@@ -55,6 +59,7 @@ func Find(ctx context.Context, repoDir string) ([]model.Dependency, error) {
 			return nil, fmt.Errorf("decode go list output: %w", err)
 		}
 
+		// Пропускаем основной модуль и зависимости, у которых нет доступного обновления.
 		if m.Main || m.Update == nil {
 			continue
 		}
