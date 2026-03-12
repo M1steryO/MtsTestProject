@@ -41,4 +41,4 @@ jobs:
         run: go test ./... -v
 
       - name: Build
-        run: go build -v ./cmd/repo-check
+        run: go build -v ./cmd/cli
