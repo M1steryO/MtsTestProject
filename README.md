@@ -2,17 +2,13 @@
 
 ### 1\. Собрать проект
 
-```
-Bash
-
+```Bash
 go build -o cli ./cmd/cli
 ```
 
 ### 2\. Запустить
 
-```
-Bash
-
+```Bash
 ./cli https://github.com/gin-gonic/gin.git
 ```
 
@@ -21,9 +17,7 @@ Bash
 
 Если нужен вывод в JSON:
 
-```
-Bash
-
+```Bash
 ./cli --json https://github.com/gin-gonic/gin.git
 ```
 
