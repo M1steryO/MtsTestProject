@@ -13,10 +13,16 @@ func PrintJSON(w io.Writer, res model.Result) error {
 	return enc.Encode(res)
 }
 
-func PrintText(w io.Writer, res model.Result) {
-	fmt.Fprintf(w, "Module: %s\n", res.Module)
-	fmt.Fprintf(w, "Go version: %s\n", res.GoVersion)
-	fmt.Fprintf(w, "Dependencies with available updates: %d\n", len(res.Updates))
+func PrintText(w io.Writer, res model.Result) error {
+	if _, err := fmt.Fprintf(w, "Module: %s\n", res.Module); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(w, "Go version: %s\n", res.GoVersion); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(w, "Dependencies with available updates: %d\n", len(res.Updates)); err != nil {
+		return err
+	}
 
 	for _, dep := range res.Updates {
 		indirect := ""
@@ -24,13 +30,17 @@ func PrintText(w io.Writer, res model.Result) {
 			indirect = " (indirect)"
 		}
 
-		fmt.Fprintf(
+		if _, err := fmt.Fprintf(
 			w,
 			"- %s: %s -> %s%s\n",
 			dep.Path,
 			dep.CurrentVersion,
 			dep.LatestVersion,
 			indirect,
-		)
+		); err != nil {
+			return err
+		}
 	}
+
+	return nil
 }

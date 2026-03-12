@@ -16,7 +16,9 @@ func Parse(path string) (moduleName, goVersion string, err error) {
 		}
 		return "", "", fmt.Errorf("open go.mod: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {

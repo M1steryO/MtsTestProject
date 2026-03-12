@@ -21,7 +21,9 @@ func (s *Service) Run(ctx context.Context, repoURL string) (model.Result, error)
 	if err != nil {
 		return model.Result{}, fmt.Errorf("create temp dir: %w", err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer func() {
+		_ = os.RemoveAll(tmpDir)
+	}()
 
 	cloneCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
